@@ -16,7 +16,7 @@ export default {
     NavBar
   },
   head: {
-    title: 'Nuxt.js + Vuetify'
+    title: 'Read CSV',
   },
 }
 </script>

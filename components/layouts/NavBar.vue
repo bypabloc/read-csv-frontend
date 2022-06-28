@@ -1,53 +1,53 @@
 <template>
-  <v-card class="overflow-hidden">
+  <v-layout>
     <v-app-bar
-      app
-      absolute
-      color="primary"
-      elevate-on-scroll
-      scroll-target="#scrolling-techniques-7"
+      color="teal-darken-4"
     >
-      <v-app-bar-nav-icon></v-app-bar-nav-icon>
+      <template v-slot:prepend>
+        <v-app-bar-nav-icon></v-app-bar-nav-icon>
+      </template>
 
-      <v-toolbar-title>Title</v-toolbar-title>
+      <v-app-bar-title>Title</v-app-bar-title>
 
       <v-spacer></v-spacer>
 
-      <Icon
-        icon="mdi-magnify"
-      ></Icon>
+      <v-btn icon>
+        <v-icon>mdi-magnify</v-icon>
+      </v-btn>
 
-      <Icon
-        icon="mdi-heart"
-      ></Icon>
+      <v-btn icon>
+        <v-icon>mdi-heart</v-icon>
+      </v-btn>
 
-      <ThemesButton/>
-
-      <Icon
-        icon="mdi-dots-vertical"
-      ></Icon>
+      <v-btn icon>
+        <v-icon>mdi-dots-vertical</v-icon>
+      </v-btn>
     </v-app-bar>
-    <v-sheet
-      id="scrolling-techniques-7"
-      class="overflow-y-auto"
-    >
-      <v-container>
-        <slot></slot>
+
+    <v-main>
+      <v-container
+        fluid
+        class="d-flex justify-center align-center"
+      >
+        <v-row dense>
+          <v-col
+            cols="10"
+          >
+            <slot></slot>
+          </v-col>
+        </v-row>
       </v-container>
-    </v-sheet>
-  </v-card>
+    </v-main>
+  </v-layout>
 </template>
+
 
 <script>
 import { defineComponent } from 'vue'
-import Icon from '~/components/buttons/Icon.vue'
-import ThemesButton from '~/components/buttons/Themes.vue'
 
 export default defineComponent({
   name: 'NavBar',
   components: {
-    Icon,
-    ThemesButton,
   },
   setup() {
     return {

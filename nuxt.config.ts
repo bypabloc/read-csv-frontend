@@ -26,4 +26,9 @@ export default defineNuxtConfig({
       { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }
     ]
   },
+  runtimeConfig: {
+    public: {
+      apiBaseUrl: process.env.ENDPOINT_URL || 'http://localhost:3000',
+    }
+  },
 })
