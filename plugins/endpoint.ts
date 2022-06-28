@@ -2,22 +2,23 @@ export default defineNuxtPlugin((nuxtApp) => {
 
     const config = useRuntimeConfig()
     
-    const endpoint = (
+    const endpoint = async (
         url: string,
         {
             method = 'GET',
             headers = {},
-            body = null,
+            body = {},
         } = {}
     ) => {
         window.console.log('endpoint', url, method, headers, body);
-        return window.fetch( config.public.apiBaseUrl + url, {
+        return await window.fetch( config.public.apiBaseUrl + url, {
             method,
-            headers,
-            body,
-        } ).then( response => {
-            console.log('response', response);
-        } );
+            headers: {
+                ...headers,
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(body),
+        } ).then( (response) => response.json() );
     }
 
     return {

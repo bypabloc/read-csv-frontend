@@ -1,27 +1,27 @@
-globalThis._importMeta_={url:import.meta.url,env:process.env};import 'file:///home/pablo/projects/nuxt-app/node_modules/node-fetch-native/dist/polyfill.mjs';
+globalThis._importMeta_={url:import.meta.url,env:process.env};import 'file:///home/pablo/projects/read-csv-frontend/node_modules/node-fetch-native/dist/polyfill.mjs';
 import { Server } from 'http';
 import { tmpdir } from 'os';
 import { join } from 'path';
 import { mkdirSync } from 'fs';
 import { parentPort, threadId } from 'worker_threads';
-import { provider, isWindows } from 'file:///home/pablo/projects/nuxt-app/node_modules/std-env/dist/index.mjs';
-import { defineEventHandler, handleCacheHeaders, createEvent, createApp, createRouter, lazyEventHandler, eventHandler, useQuery } from 'file:///home/pablo/projects/nuxt-app/node_modules/h3/dist/index.mjs';
-import { createFetch as createFetch$1, Headers } from 'file:///home/pablo/projects/nuxt-app/node_modules/ohmyfetch/dist/node.mjs';
-import destr from 'file:///home/pablo/projects/nuxt-app/node_modules/destr/dist/index.mjs';
-import { createRouter as createRouter$1 } from 'file:///home/pablo/projects/nuxt-app/node_modules/radix3/dist/index.mjs';
-import { createCall, createFetch } from 'file:///home/pablo/projects/nuxt-app/node_modules/unenv/runtime/fetch/index.mjs';
-import { createHooks } from 'file:///home/pablo/projects/nuxt-app/node_modules/hookable/dist/index.mjs';
-import { hash } from 'file:///home/pablo/projects/nuxt-app/node_modules/ohash/dist/index.mjs';
-import { parseURL, withQuery, joinURL } from 'file:///home/pablo/projects/nuxt-app/node_modules/ufo/dist/index.mjs';
-import { createStorage } from 'file:///home/pablo/projects/nuxt-app/node_modules/unstorage/dist/index.mjs';
-import _unstorage_drivers_fs from 'file:///home/pablo/projects/nuxt-app/node_modules/unstorage/dist/drivers/fs.mjs';
-import { createRenderer } from 'file:///home/pablo/projects/nuxt-app/node_modules/vue-bundle-renderer/dist/index.mjs';
-import devalue from 'file:///home/pablo/projects/nuxt-app/node_modules/@nuxt/devalue/dist/devalue.mjs';
-import { renderToString } from 'file:///home/pablo/projects/nuxt-app/node_modules/vue/server-renderer/index.mjs';
-import { snakeCase } from 'file:///home/pablo/projects/nuxt-app/node_modules/scule/dist/index.mjs';
-import htmlTemplate from '/home/pablo/projects/nuxt-app/.nuxt/views/document.template.mjs';
+import { provider, isWindows } from 'file:///home/pablo/projects/read-csv-frontend/node_modules/std-env/dist/index.mjs';
+import { defineEventHandler, handleCacheHeaders, createEvent, createApp, createRouter, lazyEventHandler, eventHandler, useQuery } from 'file:///home/pablo/projects/read-csv-frontend/node_modules/h3/dist/index.mjs';
+import { createFetch as createFetch$1, Headers } from 'file:///home/pablo/projects/read-csv-frontend/node_modules/ohmyfetch/dist/node.mjs';
+import destr from 'file:///home/pablo/projects/read-csv-frontend/node_modules/destr/dist/index.mjs';
+import { createRouter as createRouter$1 } from 'file:///home/pablo/projects/read-csv-frontend/node_modules/radix3/dist/index.mjs';
+import { createCall, createFetch } from 'file:///home/pablo/projects/read-csv-frontend/node_modules/unenv/runtime/fetch/index.mjs';
+import { createHooks } from 'file:///home/pablo/projects/read-csv-frontend/node_modules/hookable/dist/index.mjs';
+import { hash } from 'file:///home/pablo/projects/read-csv-frontend/node_modules/ohash/dist/index.mjs';
+import { parseURL, withQuery, joinURL } from 'file:///home/pablo/projects/read-csv-frontend/node_modules/ufo/dist/index.mjs';
+import { createStorage } from 'file:///home/pablo/projects/read-csv-frontend/node_modules/unstorage/dist/index.mjs';
+import _unstorage_drivers_fs from 'file:///home/pablo/projects/read-csv-frontend/node_modules/unstorage/dist/drivers/fs.mjs';
+import { createRenderer } from 'file:///home/pablo/projects/read-csv-frontend/node_modules/vue-bundle-renderer/dist/index.mjs';
+import devalue from 'file:///home/pablo/projects/read-csv-frontend/node_modules/@nuxt/devalue/dist/devalue.mjs';
+import { renderToString } from 'file:///home/pablo/projects/read-csv-frontend/node_modules/vue/server-renderer/index.mjs';
+import { snakeCase } from 'file:///home/pablo/projects/read-csv-frontend/node_modules/scule/dist/index.mjs';
+import htmlTemplate from '/home/pablo/projects/read-csv-frontend/.nuxt/views/document.template.mjs';
 
-const _runtimeConfig = {"app":{"baseURL":"/","buildAssetsDir":"/_nuxt/","cdnURL":""},"nitro":{"routes":{},"envPrefix":"NUXT_"},"public":{}};
+const _runtimeConfig = {"app":{"baseURL":"/","buildAssetsDir":"/_nuxt/","cdnURL":""},"nitro":{"routes":{},"envPrefix":"NUXT_"},"public":{"apiBaseUrl":"http://127.0.0.1:5000/v1"}};
 const ENV_PREFIX = "NITRO_";
 const ENV_PREFIX_ALT = _runtimeConfig.nitro.envPrefix ?? process.env.NITRO_ENV_PREFIX ?? "_";
 const getEnv = (key) => {
@@ -78,7 +78,7 @@ function timingMiddleware(_req, res, next) {
   next();
 }
 
-const serverAssets = [{"baseName":"server","dir":"/home/pablo/projects/nuxt-app/server/assets"}];
+const serverAssets = [{"baseName":"server","dir":"/home/pablo/projects/read-csv-frontend/server/assets"}];
 
 const assets = createStorage();
 
@@ -92,10 +92,10 @@ const useStorage = () => storage;
 
 storage.mount('/assets', assets);
 
-storage.mount('root', _unstorage_drivers_fs({"driver":"fs","base":"/home/pablo/projects/nuxt-app","ignore":["**/node_modules/**","**/.git/**"]}));
-storage.mount('src', _unstorage_drivers_fs({"driver":"fs","base":"/home/pablo/projects/nuxt-app/server","ignore":["**/node_modules/**","**/.git/**"]}));
-storage.mount('build', _unstorage_drivers_fs({"driver":"fs","base":"/home/pablo/projects/nuxt-app/.nuxt","ignore":["**/node_modules/**","**/.git/**"]}));
-storage.mount('cache', _unstorage_drivers_fs({"driver":"fs","base":"/home/pablo/projects/nuxt-app/.nuxt/cache","ignore":["**/node_modules/**","**/.git/**"]}));
+storage.mount('root', _unstorage_drivers_fs({"driver":"fs","base":"/home/pablo/projects/read-csv-frontend","ignore":["**/node_modules/**","**/.git/**"]}));
+storage.mount('src', _unstorage_drivers_fs({"driver":"fs","base":"/home/pablo/projects/read-csv-frontend/server","ignore":["**/node_modules/**","**/.git/**"]}));
+storage.mount('build', _unstorage_drivers_fs({"driver":"fs","base":"/home/pablo/projects/read-csv-frontend/.nuxt","ignore":["**/node_modules/**","**/.git/**"]}));
+storage.mount('cache', _unstorage_drivers_fs({"driver":"fs","base":"/home/pablo/projects/read-csv-frontend/.nuxt/cache","ignore":["**/node_modules/**","**/.git/**"]}));
 
 const defaultCacheOptions = {
   name: "_",
@@ -316,11 +316,11 @@ const errorHandler = (async function errorhandler(_error, event) {
   event.res.end(html);
 });
 
-const _lazy_890731 = () => Promise.resolve().then(function () { return renderer$1; });
+const _lazy_737490 = () => Promise.resolve().then(function () { return renderer$1; });
 
 const handlers = [
-  { route: '/__nuxt_error', handler: _lazy_890731, lazy: true, middleware: false, method: undefined },
-  { route: '/**', handler: _lazy_890731, lazy: true, middleware: false, method: undefined }
+  { route: '/__nuxt_error', handler: _lazy_737490, lazy: true, middleware: false, method: undefined },
+  { route: '/**', handler: _lazy_737490, lazy: true, middleware: false, method: undefined }
 ];
 
 function createNitroApp() {
@@ -402,8 +402,8 @@ function publicAssetsURL(...path) {
   return path.length ? joinURL(publicBase, ...path) : publicBase;
 }
 
-const getClientManifest = () => import('/home/pablo/projects/nuxt-app/.nuxt/dist/server/client.manifest.mjs').then((r) => r.default || r);
-const getServerEntry = () => import('/home/pablo/projects/nuxt-app/.nuxt/dist/server/server.mjs').then((r) => r.default || r);
+const getClientManifest = () => import('/home/pablo/projects/read-csv-frontend/.nuxt/dist/server/client.manifest.mjs').then((r) => r.default || r);
+const getServerEntry = () => import('/home/pablo/projects/read-csv-frontend/.nuxt/dist/server/server.mjs').then((r) => r.default || r);
 const getSSRRenderer = lazyCachedFunction(async () => {
   const clientManifest = await getClientManifest();
   if (!clientManifest) {

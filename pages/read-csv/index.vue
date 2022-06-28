@@ -32,81 +32,87 @@
     </v-btn>
 
   </v-form>
+  <LineChart
+    :data="dataChart"
+  />
+  {{ dataChart }}
 </template>
 
 <script lang="ts">
-import { defineComponent, ref } from 'vue'
-
-// login
-// https://codesandbox.io/s/vuetify-top-navbar-frhu8
+import { reactive, defineComponent, ref } from "vue";
+import Line from '~/components/charts/line';
 
 export default defineComponent({
   name: 'Users',
+  components: {
+    LineChart: Line,
+  },
   setup() {
-    // refs
+    // ref
     const csvs = ref([])
     const valid = ref(false)
-    const name = ref('')
-    const nameRules = [
-      v => !!v || 'Name is required',
-      v => (v && v.length <= 10) || 'Name must be less than 10 characters',
-    ]
-    const email = ref('')
-    const emailRules = [
-      v => !!v || 'E-mail is required',
-      v => /.+@.+\..+/.test(v) || 'E-mail must be valid',
-    ]
-    const select = ref('')
-    const items = [
-      'Item 1',
-      'Item 2',
-      'Item 3',
-      'Item 4',
-    ]
-    const checkbox = ref(false)
+    const dataChart = reactive({
+        labels: ['Samuel', 'Pablo', 'March', 'April', 'May', 'June', 'July'],
+        datasets: [
+            {
+                backgroundColor: '#f87979',
+                data: [40, 39, 10, 40, 39, 80, 40]
+            }
+        ]
+    })
 
     // refs
     const form = ref(null)
 
     const { $endpoint } = useNuxtApp()
     // methods
-    const generateCharts = () => {
+    const generateCharts = async () => {
       console.log('generateCharts', csvs.value)
-      const readCsv = $endpoint('/read-csv', {
-        method: 'POST',
-        // body: csvs.value,
-      })
-      console.log('readCsv', readCsv)
-      // fetch('/api/charts', {
-      //   method: 'POST',
-      //   body: JSON.stringify(csvs.value),
-      // })
-      //   .then(res => res.json())
-      //   .then(res => {
-      //     console.log('res', res)
-      //   })
-      //   .catch(err => {
-      //     console.log('err', err)
-      //   })
+      const fileToLoad = csvs.value[0]
+      
+      // FileReader function for read the file.
+      const fileReader = new FileReader();
+      let base64;
+      // Onload of file read the file content
+      fileReader.onload = async function(fileLoadedEvent) {
+        base64 = fileLoadedEvent.target.result;
+        // Print data in console
+        navigator.clipboard.writeText(base64);
+        
+        try {
+          const readCsv = await $endpoint('/read-csv', {
+            method: 'POST',
+            body: {
+              csv: base64,
+            },
+          })
+
+          const { data_for_graphs, datetime_list } = readCsv.data
+
+          console.log('readCsv', data_for_graphs, datetime_list)
+          dataChart.labels = datetime_list
+          dataChart.datasets[0].data = data_for_graphs['Core 0 C0 Ocupación [%]']
+
+        } catch (error) {
+          console.log('error', error)
+        }
+      };
+      // Convert data to base64
+      fileReader.readAsDataURL(fileToLoad);
     }
     const reset = () => {
       console.log('reset')
     }
-
+    
     return {
       csvs,
-      valid,
-      name,
-      nameRules,
-      email,
-      emailRules,
-      select,
-      items,
-      checkbox,
       generateCharts,
       reset,
+      valid,
 
       form,
+
+      dataChart,
     }
   }
 })
