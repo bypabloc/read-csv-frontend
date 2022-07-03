@@ -135,7 +135,7 @@ export default defineComponent({
         csvs.value = []
       }
     }
-    const onAutocompleteChange = (value: any) => {
+    const onAutocompleteChange = (value: string) => {
       if(value) {
         const { data_for_graphs, datetime_list } = dataGenerated
         const data_for_graphs_to_array = Object.keys(data_for_graphs).map(key => data_for_graphs[key])
