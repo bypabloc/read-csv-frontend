@@ -1,9 +1,5 @@
 <template>
-  <v-form
-    ref="form"
-    v-model="valid"
-    lazy-validation
-  >
+  <v-form>
     <v-file-input
       accept="text/csv"
       label="Indicate the csv"
@@ -12,13 +8,15 @@
         v => !!v || 'Please indicate the csv'
       ]"
       v-model="csvs"
+      @change="onFileCsvChange"
     ></v-file-input>
 
     <v-btn
-      :disabled="!valid"
+      :disabled="!formValid || formLoading"
       color="success"
       class="mr-4"
       @click="generateCharts"
+      :loading="formLoading"
     >
       Generate charts
     </v-btn>
@@ -28,14 +26,24 @@
       class="mr-4"
       @click="reset"
     >
-      Reset Form
+      Reset
     </v-btn>
 
   </v-form>
+  <v-col cols="12">
+    <v-select
+      v-if="generatedCharts"
+      v-model="autocompleteValue"
+      :items="autocompleteItems"
+      dense
+      filled
+      label="Gráficas"
+      @update:modelValue="onAutocompleteChange"
+    ></v-select>
+  </v-col>
   <LineChart
     :data="dataChart"
   />
-  {{ dataChart }}
 </template>
 
 <script lang="ts">
@@ -50,35 +58,42 @@ export default defineComponent({
   setup() {
     // ref
     const csvs = ref([])
-    const valid = ref(false)
     const dataChart = reactive({
-        labels: ['Samuel', 'Pablo', 'March', 'April', 'May', 'June', 'July'],
+        labels: [],
         datasets: [
             {
                 backgroundColor: '#f87979',
-                data: [40, 39, 10, 40, 39, 80, 40]
+                data: []
             }
         ]
     })
 
     // refs
-    const form = ref(null)
+    const formValid = ref(false)
+    const formLoading = ref(false)
+    const generatedCharts = ref(false)
+    const dataGenerated = reactive({
+      data_for_graphs: [],
+      datetime_list: [],
+    })
+    
+    const autocompleteValue = ref('')
+    const autocompleteItems = ref([])
 
     const { $endpoint } = useNuxtApp()
+
     // methods
     const generateCharts = async () => {
-      console.log('generateCharts', csvs.value)
+      formLoading.value = true
+      if(!formValid.value) {
+        return
+      }
       const fileToLoad = csvs.value[0]
       
-      // FileReader function for read the file.
       const fileReader = new FileReader();
       let base64;
-      // Onload of file read the file content
       fileReader.onload = async function(fileLoadedEvent) {
         base64 = fileLoadedEvent.target.result;
-        // Print data in console
-        navigator.clipboard.writeText(base64);
-        
         try {
           const readCsv = await $endpoint('/read-csv', {
             method: 'POST',
@@ -86,33 +101,61 @@ export default defineComponent({
               csv: base64,
             },
           })
-
+          
           const { data_for_graphs, datetime_list } = readCsv.data
-
-          console.log('readCsv', data_for_graphs, datetime_list)
+          dataGenerated.data_for_graphs = data_for_graphs
+          dataGenerated.datetime_list = datetime_list
           dataChart.labels = datetime_list
-          dataChart.datasets[0].data = data_for_graphs['Core 0 C0 Ocupación [%]']
 
+          autocompleteItems.value = Object.keys(data_for_graphs).map(key => data_for_graphs[key].name)
+          generatedCharts.value = true
         } catch (error) {
           console.log('error', error)
+          generatedCharts.value = false
         }
+        formLoading.value = false
       };
-      // Convert data to base64
       fileReader.readAsDataURL(fileToLoad);
     }
-    const reset = () => {
-      console.log('reset')
+    const reset = async () => {
+      formValid.value = false
+      csvs.value = []
+      dataChart.labels = []
+      dataChart.datasets[0].data = []
+      generatedCharts.value = false
+    }
+
+    const onFileCsvChange = (e: any) => {
+      const file = e.target.files[0]
+      if(file) {
+        formValid.value = true
+        csvs.value = [file]
+      }else {
+        formValid.value = false
+        csvs.value = []
+      }
+    }
+    const onAutocompleteChange = (value: any) => {
+      if(value) {
+        const { data_for_graphs, datetime_list } = dataGenerated
+        const data_for_graphs_to_array = Object.keys(data_for_graphs).map(key => data_for_graphs[key])
+        dataChart.datasets[0].data = data_for_graphs_to_array.find(item => item.name === value).data
+      }
     }
     
     return {
       csvs,
       generateCharts,
+      generatedCharts,
       reset,
-      valid,
-
-      form,
+      formValid,
+      formLoading,
+      autocompleteValue,
+      autocompleteItems,
 
       dataChart,
+      onFileCsvChange,
+      onAutocompleteChange,
     }
   }
 })

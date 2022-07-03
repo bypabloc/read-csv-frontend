@@ -10,7 +10,6 @@ export default defineNuxtPlugin((nuxtApp) => {
             body = {},
         } = {}
     ) => {
-        window.console.log('endpoint', url, method, headers, body);
         return await window.fetch( config.public.apiBaseUrl + url, {
             method,
             headers: {
